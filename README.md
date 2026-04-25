@@ -70,6 +70,24 @@ Clone this theme locally and run any of the following commands in your terminal:
 | `npm run build`   | Build your production site to `./dist/`      |
 | `npm run preview` | Preview your build locally, before deploying |
 
+## Create a project with the CLI
+
+You can now scaffold projects directly from this starter with the create CLI:
+
+```bash
+npm create accessible-astro-starter@latest
+```
+
+The CLI walks you through:
+
+- project directory
+- site name
+- preset selection (`full`, `blog`, `portfolio`, `minimal`, `barebones`)
+- whether to keep the Accessible Astro launcher
+
+Generated projects always strip contributor-only workspace tooling such as `scripts/workspace-config.js` and simplify
+`astro.config.mjs` accordingly.
+
 ## Accessible Astro ecosystem
 
 The Accessible Astro ecosystem is a collection of projects that are designed to help you build accessible web applications. It includes:
