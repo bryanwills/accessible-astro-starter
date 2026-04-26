@@ -10,11 +10,15 @@ npm create accessible-astro-starter@latest
 
 ## Local development
 
+From the starter repo root, run:
+
 ```bash
 npm install
 npm run build:cli
 npm run test:cli
 ```
+
+From this package directory, use `npm run build` and `npm run test` for package-local checks.
 
 ## Test the CLI locally
 
