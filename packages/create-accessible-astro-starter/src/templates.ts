@@ -1,5 +1,5 @@
 import type { ProjectManifest, ResolvedOptions } from './types.js'
-import { escapeForSingleQuotedString, formatPresetLabel } from './utils.js'
+import { escapeForHtml, escapeForSingleQuotedString, formatPresetLabel } from './utils.js'
 
 type ThemeNavItem =
   | {
@@ -403,16 +403,17 @@ ${includeLauncher ? `      <div class="mobile-launcher">
 
     const setActiveMenuItem = (): void => {
       const mobileDesktopMenus = mainNav.querySelectorAll('nav > ul')
-      const currentPathname = window.location.pathname
+      const currentPath = window.location.pathname.replace(/\/+$/, '') || '/'
 
       mobileDesktopMenus.forEach((menu) => {
         const menuItems = [...menu.querySelectorAll('a[href]:not([rel*="external"])')] as HTMLAnchorElement[]
 
         menuItems.forEach((menuItem) => {
-          if (currentPathname.includes(menuItem.pathname.replaceAll('/', '')) && menuItem.textContent !== 'Home') {
-            menuItem.classList.add('is-active')
-            menuItem.setAttribute('aria-current', 'page')
-          } else if (menuItem.textContent === 'Home' && currentPathname === '/') {
+          const itemPath = menuItem.pathname.replace(/\/+$/, '') || '/'
+          const isHome = itemPath === '/'
+          const isActive = isHome ? currentPath === '/' : currentPath === itemPath || currentPath.startsWith(itemPath + '/')
+
+          if (isActive) {
             menuItem.classList.add('is-active')
             menuItem.setAttribute('aria-current', 'page')
           }
@@ -857,7 +858,7 @@ ${includeLauncher ? `  <li class="menu-item desktop-launcher">
 
 export function createHero(options: Pick<ResolvedOptions, 'preset' | 'siteName'>): string {
   const [firstWord = '', ...remainingWords] = options.siteName.trim().split(/\s+/)
-  const remainingTitle = remainingWords.length > 0 ? ` ${escapeForSingleQuotedString(remainingWords.join(' '))}` : ''
+  const remainingTitle = remainingWords.length > 0 ? ` ${escapeForHtml(remainingWords.join(' '))}` : ''
   const description =
     options.preset === 'blog'
       ? 'A clean, accessible blog starter with a contact flow and room to shape your editorial voice.'
@@ -926,7 +927,7 @@ const { src = '/astronaut-hero-img.webp' }: Props = Astro.props
   <div class="container">
     <div class="grid grid-cols-1 items-center gap-24 lg:grid-cols-2">
       <div class="flex flex-col items-center gap-8 md:items-start">
-        <h1 class="text-center text-6xl md:text-left lg:text-8xl"><span class="text-gradient">${escapeForSingleQuotedString(firstWord)}</span>${remainingTitle}</h1>
+        <h1 class="text-center text-6xl md:text-left lg:text-8xl"><span class="text-gradient">${escapeForHtml(firstWord)}</span>${remainingTitle}</h1>
 ${notification}
         <p class="text-center text-2xl md:text-left">
           ${description}
@@ -1249,7 +1250,7 @@ import FeaturedPosts from '@components/FeaturedPosts.astro'
 import FeaturedProjects from '@components/FeaturedProjects.astro'
 ---
 
-<DefaultLayout title="${escapeForSingleQuotedString(siteName)}" useTitleTemplate={false}>
+<DefaultLayout title="${escapeForHtml(siteName)}" useTitleTemplate={false}>
   <Hero />
 
   <section class="mb-24">
@@ -1279,7 +1280,7 @@ import Hero from '@components/Hero.astro'
 import FeaturedPosts from '@components/FeaturedPosts.astro'
 ---
 
-<DefaultLayout title="${escapeForSingleQuotedString(siteName)}" useTitleTemplate={false}>
+<DefaultLayout title="${escapeForHtml(siteName)}" useTitleTemplate={false}>
   <Hero />
 
   <FeaturedPosts />
@@ -1294,7 +1295,7 @@ import Hero from '@components/Hero.astro'
 import FeaturedProjects from '@components/FeaturedProjects.astro'
 ---
 
-<DefaultLayout title="${escapeForSingleQuotedString(siteName)}" useTitleTemplate={false}>
+<DefaultLayout title="${escapeForHtml(siteName)}" useTitleTemplate={false}>
   <Hero />
 
   <FeaturedProjects />
@@ -1323,10 +1324,10 @@ import DefaultLayout from '@layouts/DefaultLayout.astro'
 import { Heading, Link } from 'accessible-astro-components'
 ---
 
-<DefaultLayout title="${escapeForSingleQuotedString(siteName)}" useTitleTemplate={false}>
+<DefaultLayout title="${escapeForHtml(siteName)}" useTitleTemplate={false}>
   <section class="my-24">
     <div class="space-content container">
-      <Heading level="h1">${siteName}</Heading>
+      <Heading level="h1">${escapeForHtml(siteName)}</Heading>
       <p class="text-2xl">
         A lightweight accessible site with just enough structure to start writing and shipping quickly.
       </p>
@@ -1352,10 +1353,10 @@ import DefaultLayout from '@layouts/DefaultLayout.astro'
 import { Heading, Notification } from 'accessible-astro-components'
 ---
 
-<DefaultLayout title="${escapeForSingleQuotedString(siteName)}" useTitleTemplate={false}>
+<DefaultLayout title="${escapeForHtml(siteName)}" useTitleTemplate={false}>
   <section class="my-24">
     <div class="space-content container">
-      <Heading level="h1">${siteName}</Heading>
+      <Heading level="h1">${escapeForHtml(siteName)}</Heading>
       <p class="text-2xl">
         This is a barebones accessible Astro foundation with the core layout, navigation, footer, and styles intact.
       </p>
@@ -1394,7 +1395,7 @@ import { Heading } from 'accessible-astro-components'
 <DefaultLayout title="About">
   <PageHeader
     title="About"
-    subtitle="Use this page to introduce ${escapeForSingleQuotedString(siteName)}, your work, and the people behind it."
+    subtitle="Use this page to introduce ${escapeForHtml(siteName)}, your work, and the people behind it."
     bgType="bordered"
   />
   <section class="my-16">
@@ -1443,14 +1444,14 @@ import { Icon } from 'astro-icon/components'
         <Heading level="h2">Contact details</Heading>
         <p>Replace these placeholders with your own email address, availability, and preferred contact channels.</p>
         <div class="gap-2xs flex items-center">
-          <Icon aria-hidden="true" name="lucide:mail" size={20} class="flex-shrink-0" />
+          <Icon aria-hidden="true" name="lucide:mail" size={20} class="shrink-0" />
           <p>
             <span class="font-bold">Email:</span>
             <Link href="mailto:hello@example.com">hello@example.com</Link>
           </p>
         </div>
         <div class="gap-2xs flex items-center">
-          <Icon aria-hidden="true" name="lucide:clock" size={20} class="flex-shrink-0" />
+          <Icon aria-hidden="true" name="lucide:clock" size={20} class="shrink-0" />
           <p>
             <span class="font-bold">Availability:</span>
             Monday to Thursday, 9:00 to 17:00
