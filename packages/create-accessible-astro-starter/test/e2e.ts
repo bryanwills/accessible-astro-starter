@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { mkdtemp } from 'node:fs/promises'
+import { mkdtemp, stat } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -10,6 +10,7 @@ import { PRESETS, type Preset, type ResolvedOptions } from '../src/types.js'
 import { slugifySiteName } from '../src/utils.js'
 
 const repoRoot = resolve(fileURLToPath(new URL('../../../../', import.meta.url)))
+const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm'
 
 function createOptions(preset: Preset, includeLauncher: boolean, targetDir: string): ResolvedOptions {
   const siteName = `E2E ${preset}`
@@ -30,6 +31,8 @@ async function runCommand(command: string, args: string[], cwd: string): Promise
       stdio: 'inherit',
       env: process.env,
     })
+
+    child.on('error', rejectPromise)
 
     child.on('close', (code) => {
       if (code === 0) {
@@ -53,9 +56,11 @@ async function main(): Promise<void> {
       const manifest = buildManifest(options)
 
       await scaffoldProject(options, manifest)
-      await runCommand('npm', ['install'], targetDir)
-      await runCommand('npm', ['run', 'build'], targetDir)
-      assert.ok(true)
+      await runCommand(npmCommand, ['install'], targetDir)
+      await runCommand(npmCommand, ['run', 'build'], targetDir)
+
+      const dist = await stat(join(targetDir, 'dist'))
+      assert.ok(dist.isDirectory())
     }
   }
 }
