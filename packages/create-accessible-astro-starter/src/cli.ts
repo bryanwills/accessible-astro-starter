@@ -1,5 +1,5 @@
 import * as p from '@clack/prompts'
-import { resolve } from 'node:path'
+import { relative, resolve } from 'node:path'
 import { buildManifest } from './presets.js'
 import { parseCliArgs, getDefaultLauncher } from './options.js'
 import { scaffoldProject } from './scaffold.js'
@@ -129,18 +129,17 @@ export async function run(argv = process.argv.slice(2)): Promise<void> {
   await scaffoldProject(options, manifest)
   spinner.stop(`Created ${options.siteName}`)
 
-  const relativeDir = options.targetDir.startsWith(process.cwd())
-    ? `.${options.targetDir.slice(process.cwd().length)}`
-    : options.targetDir
+  const relativeFromCwd = relative(process.cwd(), options.targetDir).replace(/\\/g, '/')
+  const relativeDir = relativeFromCwd === '' ? '.' : relativeFromCwd.startsWith('..') ? options.targetDir : `./${relativeFromCwd}`
 
   p.note(
     [
-      `Directory: ${relativeDir || '.'}`,
+      `Directory: ${relativeDir}`,
       `Preset: ${formatPresetLabel(options.preset)}`,
       `Launcher: ${options.includeLauncher ? 'Included' : 'Removed'}`,
       '',
       'Next steps:',
-      `cd ${relativeDir || '.'}`,
+      `cd ${relativeDir}`,
       'npm install',
       'npm run dev',
     ].join('\n'),
