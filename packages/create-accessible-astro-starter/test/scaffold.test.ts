@@ -11,9 +11,7 @@ import { slugifySiteName } from '../src/utils.js'
 
 const repoRoot = resolve(fileURLToPath(new URL('../../../../', import.meta.url)))
 
-function createOptions(preset: Preset, includeLauncher: boolean, targetDir: string): ResolvedOptions {
-  const siteName = `Fixture ${preset}`
-
+function createOptions(preset: Preset, includeLauncher: boolean, targetDir: string, siteName = `Fixture ${preset}`): ResolvedOptions {
   return {
     targetDir,
     siteName,
@@ -194,6 +192,55 @@ test('barebones preset renders notification and slim footer', async () => {
   assert.ok(!generatedFooter.includes('footerLinks'))
   assert.ok(!generatedFooter.includes('socialLinks'))
   assert.ok(!generatedFooter.includes('<Heading level="h2" size="h4">{themeConfig.name}</Heading>'))
+})
+
+test('generated markup escapes site names in HTML text and attributes', async () => {
+  const tempRoot = await mkdtemp(join(tmpdir(), 'accessible-astro-starter-'))
+  const targetDir = join(tempRoot, 'escaped-site-name')
+  const siteName = `O'Brien & <Co> "Site"`
+  const options = createOptions('minimal', true, targetDir, siteName)
+  const manifest = buildManifest(options)
+
+  process.env.ACCESSIBLE_ASTRO_STARTER_TEMPLATE_DIR = repoRoot
+  await scaffoldProject(options, manifest)
+
+  const generatedIndex = await readFile(resolve(targetDir, 'src/pages/index.astro'), 'utf8')
+  const generatedAbout = await readFile(resolve(targetDir, 'src/pages/about.astro'), 'utf8')
+
+  assert.ok(generatedIndex.includes(`title="O'Brien &amp; &lt;Co&gt; &quot;Site&quot;"`))
+  assert.ok(generatedIndex.includes(`<Heading level="h1">O'Brien &amp; &lt;Co&gt; &quot;Site&quot;</Heading>`))
+  assert.ok(generatedAbout.includes(`subtitle="Use this page to introduce O'Brien &amp; &lt;Co&gt; &quot;Site&quot;`))
+})
+
+test('generated hero escapes site names in HTML text', async () => {
+  const tempRoot = await mkdtemp(join(tmpdir(), 'accessible-astro-starter-'))
+  const targetDir = join(tempRoot, 'escaped-hero-site-name')
+  const siteName = `O'Brien & <Co> "Site"`
+  const options = createOptions('blog', true, targetDir, siteName)
+  const manifest = buildManifest(options)
+
+  process.env.ACCESSIBLE_ASTRO_STARTER_TEMPLATE_DIR = repoRoot
+  await scaffoldProject(options, manifest)
+
+  const generatedHero = await readFile(resolve(targetDir, 'src/components/Hero.astro'), 'utf8')
+
+  assert.ok(generatedHero.includes(`<span class="text-gradient">O'Brien</span> &amp; &lt;Co&gt; &quot;Site&quot;`))
+  assert.ok(!generatedHero.includes(`O\\'Brien`))
+})
+
+test('generated navigation compares active paths without substring matches', async () => {
+  const tempRoot = await mkdtemp(join(tmpdir(), 'accessible-astro-starter-'))
+  const targetDir = join(tempRoot, 'active-navigation')
+  const options = createOptions('blog', true, targetDir)
+  const manifest = buildManifest(options)
+
+  process.env.ACCESSIBLE_ASTRO_STARTER_TEMPLATE_DIR = repoRoot
+  await scaffoldProject(options, manifest)
+
+  const generatedNavigation = await readFile(resolve(targetDir, 'src/components/Navigation.astro'), 'utf8')
+
+  assert.ok(generatedNavigation.includes("currentPath === itemPath || currentPath.startsWith(itemPath + '/')"))
+  assert.ok(!generatedNavigation.includes("currentPathname.includes(menuItem.pathname.replaceAll('/', ''))"))
 })
 
 async function expectExists(rootDir: string, relativePath: string): Promise<void> {
