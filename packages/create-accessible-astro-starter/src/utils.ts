@@ -28,6 +28,14 @@ export function escapeForSingleQuotedString(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
 }
 
+export function escapeForHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
 export async function pathExists(filePath: string): Promise<boolean> {
   try {
     await access(filePath, constants.F_OK)
