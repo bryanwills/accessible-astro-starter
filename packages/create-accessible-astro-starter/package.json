@@ -1,6 +1,6 @@
 {
   "name": "create-accessible-astro-starter",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Create a new Accessible Astro Starter project with guided presets.",
   "license": "MIT",
   "type": "module",
