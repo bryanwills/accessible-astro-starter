@@ -231,6 +231,7 @@ const viteConfig = {
   css: {
     preprocessorOptions: {
       scss: {
+        loadPaths: [fileURLToPath(new URL('./src/assets', import.meta.url))],
         logger: {
           warn: () => {},
         },
@@ -403,13 +404,13 @@ ${includeLauncher ? `      <div class="mobile-launcher">
 
     const setActiveMenuItem = (): void => {
       const mobileDesktopMenus = mainNav.querySelectorAll('nav > ul')
-      const currentPath = window.location.pathname.replace(/\/+$/, '') || '/'
+      const currentPath = window.location.pathname.replace(/\\/+$/, '') || '/'
 
       mobileDesktopMenus.forEach((menu) => {
         const menuItems = [...menu.querySelectorAll('a[href]:not([rel*="external"])')] as HTMLAnchorElement[]
 
         menuItems.forEach((menuItem) => {
-          const itemPath = menuItem.pathname.replace(/\/+$/, '') || '/'
+          const itemPath = menuItem.pathname.replace(/\\/+$/, '') || '/'
           const isHome = itemPath === '/'
           const isActive = isHome ? currentPath === '/' : currentPath === itemPath || currentPath.startsWith(itemPath + '/')
 
