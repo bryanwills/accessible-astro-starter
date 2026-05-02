@@ -1,16 +1,23 @@
 {
   "name": "accessible-astro-starter",
   "description": "An Accessible Starter Theme for Astro including several accessibility features and tools to help you build faster.",
-  "version": "5.1.1",
+  "version": "5.2.0",
   "author": "Incluud",
   "license": "MIT",
   "type": "module",
   "homepage": "https://accessible-astro-starter.incluud.dev/",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "build:cli": "npm --workspace create-accessible-astro-starter run build",
+    "create:local": "node packages/create-accessible-astro-starter/scripts/run-local.mjs",
+    "test:cli": "npm --workspace create-accessible-astro-starter run test",
+    "test:cli:e2e": "npm --workspace create-accessible-astro-starter run test:e2e"
   },
   "keywords": [
     "astro",
