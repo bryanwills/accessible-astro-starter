@@ -3,6 +3,7 @@ import { relative, resolve } from 'node:path'
 import { buildManifest } from './presets.js'
 import { parseCliArgs, getDefaultLauncher } from './options.js'
 import { scaffoldProject } from './scaffold.js'
+import { outroMessage, renderIntro } from './cli-output.js'
 import type { ParsedFlags, Preset, ResolvedOptions } from './types.js'
 import { deriveSiteNameFromDirectory, formatPresetLabel, slugifySiteName } from './utils.js'
 
@@ -119,7 +120,7 @@ async function resolveOptions(flags: ParsedFlags): Promise<ResolvedOptions> {
 export async function run(argv = process.argv.slice(2)): Promise<void> {
   const flags = parseCliArgs(argv)
 
-  p.intro('Accessible Astro Starter')
+  process.stdout.write(renderIntro({ columns: process.stdout.columns }))
 
   const options = await resolveOptions(flags)
   const manifest = buildManifest(options)
@@ -130,7 +131,8 @@ export async function run(argv = process.argv.slice(2)): Promise<void> {
   spinner.stop(`Created ${options.siteName}`)
 
   const relativeFromCwd = relative(process.cwd(), options.targetDir).replace(/\\/g, '/')
-  const relativeDir = relativeFromCwd === '' ? '.' : relativeFromCwd.startsWith('..') ? options.targetDir : `./${relativeFromCwd}`
+  const relativeDir =
+    relativeFromCwd === '' ? '.' : relativeFromCwd.startsWith('..') ? options.targetDir : `./${relativeFromCwd}`
 
   p.note(
     [
@@ -146,5 +148,5 @@ export async function run(argv = process.argv.slice(2)): Promise<void> {
     'Project ready',
   )
 
-  p.outro('Happy building.')
+  p.outro(outroMessage)
 }
