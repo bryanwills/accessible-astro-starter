@@ -34,37 +34,40 @@
     "url": "https://github.com/incluud/accessible-astro-starter/issues"
   },
   "devDependencies": {
-    "@astrojs/mdx": "^5.0.3",
-    "@astrojs/partytown": "^2.1.6",
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/partytown": "^2.1.7",
     "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
-    "@iconify-json/lucide": "^1.2.100",
+    "@iconify-json/lucide": "^1.2.105",
     "@types/sanitize-html": "^2.16.1",
-    "@typescript-eslint/eslint-plugin": "^8.57.2",
-    "@typescript-eslint/parser": "^8.57.2",
-    "astro": "^6.1.1",
-    "astro-compress": "^2.4.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.1",
+    "astro": "^6.2.1",
+    "astro-compress": "^2.4.1",
     "astro-eslint-parser": "^1.4.0",
     "astro-icon": "^1.1.5",
-    "eslint": "^9.39.4",
-    "eslint-plugin-astro": "^1.6.0",
+    "eslint": "^9.39.2",
+    "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "globals": "^17.4.0",
-    "prettier": "^3.8.1",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-css-order": "^2.2.0",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "sanitize-html": "^2.17.2",
-    "sass": "^1.98.0",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "sanitize-html": "^2.17.3",
+    "sass": "^1.99.0",
     "svgo": "^4.0.1",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.4"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
     "accessible-astro-components": "^5.2.0",
     "accessible-astro-launcher": "^2.0.0",
     "astro-seo": "^1.1.0"
+  },
+  "overrides": {
+    "vite": "^7"
   },
   "engines": {
     "node": ">=22.12.0"
