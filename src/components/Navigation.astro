@@ -97,7 +97,7 @@ import { LauncherTrigger } from 'accessible-astro-launcher'
     }
 
     // execution
-    mainMenu &&
+    if (mainMenu) {
       mainMenu.addEventListener('keydown', (event: KeyboardEvent) => {
         const element = event.target as Element
         const currentMenuItem = element.closest('li')
@@ -198,11 +198,13 @@ import { LauncherTrigger } from 'accessible-astro-launcher'
           }
         }
       })
+    }
 
-    dropdownMenus &&
+    if (dropdownMenus) {
       dropdownMenus.forEach((dropdownMenu) => {
-        dropdownMenu.addEventListener('click', toggleDropdownMenu as EventListener)
+        dropdownMenu.addEventListener('click', toggleDropdownMenu)
       })
+    }
 
     setActiveMenuItem()
     window.addEventListener('click', (event: MouseEvent) => {
