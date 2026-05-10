@@ -4,7 +4,6 @@ import astro from 'eslint-plugin-astro'
 import jsxA11y from 'eslint-plugin-jsx-a11y'
 import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
-import astroParser from 'astro-eslint-parser'
 
 export default [
   // Ignore patterns
@@ -32,6 +31,10 @@ export default [
   // ESLint recommended rules
   js.configs.recommended,
 
+  // Astro recommended and strict accessibility rules
+  ...astro.configs['flat/recommended'],
+  ...astro.configs['flat/jsx-a11y-strict'],
+
   // JavaScript files
   {
     files: ['**/*.js'],
@@ -43,19 +46,7 @@ export default [
   // Astro files
   {
     files: ['**/*.astro'],
-    plugins: {
-      astro,
-    },
-    languageOptions: {
-      parser: astroParser,
-      parserOptions: {
-        parser: '@typescript-eslint/parser',
-        extraFileExtensions: ['.astro'],
-      },
-    },
     rules: {
-      ...astro.configs.recommended.rules,
-      ...astro.configs['jsx-a11y-strict'].rules,
       'no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
     },
   },
