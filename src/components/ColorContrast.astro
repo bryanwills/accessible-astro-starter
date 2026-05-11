@@ -216,7 +216,7 @@ const themes: Theme[] = [
 
     // Process all color items
     function processColorItems(): void {
-      const colorItems: NodeListOf<Element> = document.querySelectorAll('.color-item')
+      const colorItems = document.querySelectorAll('.color-item')
 
       colorItems.forEach((item) => {
         // Get the background color
