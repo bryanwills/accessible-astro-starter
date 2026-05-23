@@ -31,6 +31,7 @@ import {
   TabsTab,
   TabsPanel,
   Textarea,
+  ToastProvider,
   Tooltip,
   Video,
 } from 'accessible-astro-components'
@@ -54,6 +55,7 @@ const components = [
   { name: 'Reduced motion toggle', id: 'reducedmotion' },
   { name: 'Skip link', id: 'skiplink' },
   { name: 'Tabs', id: 'tabs' },
+  { name: 'Toast', id: 'toast' },
   { name: 'Tooltip', id: 'tooltip' },
   { name: 'Video', id: 'video' },
 ]
@@ -580,6 +582,26 @@ const components = [
           </TabsPanel>
         </Tabs>
 
+        <Heading level="h2" id="toast">Toast</Heading>
+        <p>
+          The Toast component provides non-intrusive notifications that appear temporarily. Use the ToastProvider once
+          in your layout and trigger toasts via the global <code>window.toast</code> API.
+        </p>
+        <Heading level="h3">Variants</Heading>
+        <div class="flex flex-wrap gap-2">
+          <Button id="toast-default">Default</Button>
+          <Button id="toast-success" type="success">Success</Button>
+          <Button id="toast-info" type="info">Info</Button>
+          <Button id="toast-warning" type="warning">Warning</Button>
+          <Button id="toast-error" type="error">Error</Button>
+        </div>
+        <Heading level="h3">Persistent</Heading>
+        <div class="flex flex-wrap gap-2">
+          <Button id="toast-persistent">Persistent toast</Button>
+          <Button id="toast-dismiss-all" variant="outlined">Dismiss all</Button>
+        </div>
+        <ToastProvider position="bottom-right" />
+
         <Heading level="h2" id="tooltip">Tooltip</Heading>
         <p>
           The Tooltip component provides contextual helper text with Popover API and CSS Anchor Positioning while
@@ -668,6 +690,33 @@ const components = [
         const id = link.getAttribute('href')?.replace('#', '')
         const heading = id && document.getElementById(id)
         if (heading) observer.observe(heading)
+      })
+
+      // Toast demo handlers
+      document.getElementById('toast-default')?.addEventListener('click', () => {
+        window.toast?.show({ message: 'This is a default notification.' })
+      })
+      document.getElementById('toast-success')?.addEventListener('click', () => {
+        window.toast?.success('Changes saved successfully.')
+      })
+      document.getElementById('toast-info')?.addEventListener('click', () => {
+        window.toast?.info('Your session will refresh in 2 minutes.')
+      })
+      document.getElementById('toast-warning')?.addEventListener('click', () => {
+        window.toast?.warning('Storage is almost full.')
+      })
+      document.getElementById('toast-error')?.addEventListener('click', () => {
+        window.toast?.error('Could not save your changes.')
+      })
+      document.getElementById('toast-persistent')?.addEventListener('click', () => {
+        window.toast?.show({
+          message: 'This toast will stay until dismissed.',
+          type: 'info',
+          duration: 0,
+        })
+      })
+      document.getElementById('toast-dismiss-all')?.addEventListener('click', () => {
+        window.toast?.dismissAll()
       })
     })
   </script>
