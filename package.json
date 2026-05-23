@@ -1,7 +1,7 @@
 {
   "name": "accessible-astro-starter",
   "description": "An Accessible Starter Theme for Astro including several accessibility features and tools to help you build faster.",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "author": "Incluud",
   "license": "MIT",
   "type": "module",
@@ -49,7 +49,7 @@
     "@types/sanitize-html": "^2.16.1",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
-    "astro": "^6.2.1",
+    "astro": "^6.3.7",
     "astro-compress": "^2.4.1",
     "astro-eslint-parser": "^1.4.0",
     "astro-icon": "^1.1.5",
@@ -69,7 +69,7 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
     "@tailwindcss/vite": "^4.2.4",
-    "accessible-astro-components": "^5.2.0",
+    "accessible-astro-components": "^5.3.0",
     "accessible-astro-launcher": "^2.0.0",
     "astro-seo": "^1.1.0"
   },
